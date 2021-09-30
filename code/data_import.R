@@ -74,5 +74,19 @@ df_long %>%
         labs(x = '', y = 'Proportion of total population water insecure', fill = "") +
         ylim(-1, 70) +
         theme(plot.margin = unit(c(1,1,1,1), "cm"))
-        
+
+## PIE CHART FOR EACH COUNTRY
+country_names <- unique(df_long$country)
+        df_long %>%
+                group_by(type) %>%
+                # filter(country == country_names[1]) %>% 
+                mutate(name = fct_reorder(country, -proportion)) %>%
+                ggplot(aes(fill=type, x=country, y=proportion, width = 10000)) +
+                geom_bar(stat='identity', position = "fill") + 
+                coord_polar('y', start = 0) + 
+                theme_void() + 
+                facet_wrap(~country, strip.position = "bottom") +
+                coord_polar("y", start = 0, direction = -1) +
+                labs(fill = '')+
+                theme(plot.margin = unit(c(1,1,1,1), "cm"))
         
